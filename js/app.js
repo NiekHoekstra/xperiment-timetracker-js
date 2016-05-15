@@ -43,9 +43,10 @@
 
     },
     item : function(model) {
-
       var view = ce('tr'),
           edit = ce('a'),
+          cancel = ce('a'),
+          del = ce('a'),
           props=  ['from',      'to',         'description'],
           input = [ce('input'), ce('input'),  ce('input')],
           span =  [ce('span'),  ce('span'),   ce('span')],
@@ -82,11 +83,33 @@
         td.appendChild(span[i]);
         view.appendChild(td);
       }
+      del.innerHTML = 'del';
+      del.className = 'editor';
+      del.onclick = function() {
+        if(confirm('delete?')) {
+          i = state.history.indexOf(model);
+          state.history.splice(i, 1);
+          view.parentElement.removeChild(view);
+          save(state);
+        }
+      }
+      cancel.innerHTML = 'cancel';
+      cancel.className = 'editor';
+      cancel.onclick = function() {
+        var classes = view.className.split(' ');
+        i = classes.indexOf('edit');
+        classes.splice(i,1);
+        view.className = classes.join(' ');
+      }
 
       edit.innerHTML = 'edit';
       edit.setAttribute('href', 'javascript:void(0);')
+      del.setAttribute('href', 'javascript:void(0);');
+      cancel.setAttribute('href', 'javascript:void(0);');
       td = ce('td');
       td.appendChild(edit);
+      td.appendChild(del);
+      td.appendChild(cancel);
       view.appendChild(td);
       edit.onclick = function() {
         if(view.className.indexOf('edit') == -1) {
@@ -95,6 +118,7 @@
           for(i = 0; i <l; i++) {
               input[i].value = toEdit[i](model[props[i]]);
           }
+          this.innerHTML = "save";
         }else{
           var classes = view.className.split(' ');
           //try {
@@ -102,14 +126,16 @@
             model[props[i]] = toModel[i](input[i].value);
             span[i].innerHTML = toLabel[i](model[props[i]]);
           }
+          save(state);
           //save()
           //} catch(e) {
 
           //}
           i = classes.indexOf('edit');
           classes.splice(i,1);
-          view.className = classes.join(' ');
           // end edit
+          view.className = classes.join(' ');
+          this.innerHTML = 'edit';
         }
       }
 
