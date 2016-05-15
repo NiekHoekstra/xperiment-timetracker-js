@@ -1,0 +1,133 @@
+<!doctype html>
+<html>
+<head>
+  <title>Experimental Time Tracker</title>
+  <style>
+  body {
+    font-family: sans-serif;
+  }
+
+  /* Toggle based on javascript */
+  .no-js .js {
+    display: none;
+  }
+  .js .no-js {
+    display:none;
+  }
+
+  tr:nth-child(2n+2) {
+    background-color:#DDD;
+  }
+  tr:hover {
+    background:#DDF;
+  }
+
+  /* Toggle editor areas */
+  .editor {
+    display:none;
+  }
+  .edit .editor {
+    display:block;
+  }
+  .no-editor {
+    display:block;
+  }
+  .edit .no-editor {
+    display:none;
+  }
+  #page-wrap {
+    width:1000px;
+    margin: 0px auto;
+    background-color:#EEEEEE;
+    min-height:200px;
+  }
+  .row {
+    padding:3px;
+    overflow:auto;
+  }
+  .row:after {
+    clear:both;
+  }
+  .c3 {
+    width: 25%;
+    float:left;
+  }
+  .c4 {
+    width:33%;
+    float:left;
+  }
+  .c6 {
+    width:50%;
+    float:left;
+  }
+  .c9 {
+    width:75%;
+    float:left;
+  }
+  .c12 {
+    width:100%;
+    float:left;
+  }
+  .fill-h {
+    height:100%;
+  }
+  th {
+    text-align:left;
+  }
+  .dbg {
+    border: 1px dashed red;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+  }
+  .dbg2 {
+    border: 1px dashed blue;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+  }
+  </style>
+</head>
+<body class="no-js">
+  <div id="page-wrap">
+    <div class="js">
+      <div class="row c12 dbg" data-app="download">
+        This webapplication is a simple time tracker.<br/>
+        Information is stored on your computer, no information is sent to the internet.<br/>
+        Technically speaking, this is achieved via <a href="https://en.wikipedia.org/wiki/Web_storage">local storage</a>. Clearing cookies may clear this as well.<br/>
+        <a href="javascript:void(0);">Download in Excel/CSV format.</a><br/>
+        <b>Note: Adjust the time column 'type format' to convert numbers to date format.</b>
+      </div>
+      <div class="row c12">
+        <h2> Timer </h2>
+        The timer allows you to start and stop a passive timer.<br/>
+        You can close this tab after starting the timer. Going back to this page will allow you to stop it.
+      </div>
+      <div class="row" data-app="timer">
+        <div class="c6">
+          <span>{{start time}}</span>
+        </div>
+        <div class="c3">
+          <button onclick="">Start</button>
+        </div>
+      </div>
+      <div class="row">
+        <h2>History</h2>
+      </div>
+      <div class="row" data-app="history">
+        All times are shown in local time. Crossing a time zone should not affect the result.
+        <table class="c12">
+          <thead>
+            <tr><th>From</th><th>To</th><th>Description</th><th></th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="no-js row">
+      Please Enable Javascript
+    </div>
+  </div>
+  <script type="text/javascript" src="./js/app.js"></script>
+</body>
+</html>
