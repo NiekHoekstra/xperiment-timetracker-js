@@ -1,7 +1,23 @@
 (function(element, save, load) {
   // Seems like we're supporting javascript :)
   element.className = 'js';
-  var state = null;
+  var state = null,
+      ce = function(e) { return document.createElement(e); };
+
+   var dateToString = function(date) {
+     var m = date.getMinutes().toString();
+     if(m.length < 2) m = "0"+m;
+     return  date.getDate()+'-'+(date.getMonth()+1)+'-'+date.getFullYear()+' '+date.getHours()+':'+m;
+   }
+   var stringToDate = function (str) {
+     var d = new Date(), parts = str.replace(' ', '-').replace(':', '-').split('-'), l = parts.length;
+     d.setDate(parts[0]);
+     d.setMonth(parts[1]-1);
+     d.setFullYear(parts[2]);
+     d.setHours(parts[3]);
+     d.setMinutes(parts[4]);
+     return d;
+   }
 
   // 1. History view
   var history = {
@@ -9,7 +25,7 @@
       this.body = element.querySelector('tbody');
       this.views = [];
       var i, l = state.history.length, h;
-      var tbody = document.createElement('tbody');
+      var tbody = ce('tbody');
       for(i = 0; i < l; i++) {
         h = new this.item(state.history[i]);
         tbody.appendChild(h.view);
@@ -26,33 +42,79 @@
     update : function() {
 
     },
-    item : function(data) {
-      var view = document.createElement('tr'), edit = document.createElement('a');
-      
-      view.innerHTML = '<td>'+new Date(data.from).toLocaleString()+'</td><td>'+new Date(data.to).toLocaleString()+'</td><td>No Description</td>';
+    item : function(model) {
+
+      var view = ce('tr'),
+          edit = ce('a'),
+          props=  ['from',      'to',         'description'],
+          input = [ce('input'), ce('input'),  ce('input')],
+          span =  [ce('span'),  ce('span'),   ce('span')],
+          toLabel = [
+            function(raw) { var d = new Date(); d.setTime(raw); return dateToString(d); },
+            null,
+            function(raw) { return raw; }
+          ],
+          toModel = [
+            function(raw) { return stringToDate(raw).getTime(); },
+            null,
+            toLabel[2]
+          ],
+          toEdit = [
+            toLabel[0],
+            toLabel[0],
+            toLabel[2]
+          ],
+          i,
+          l = props.length,
+          td,
+          context = this;
+
+      toLabel[1] = toLabel[0];
+      toModel[1] = toModel[0];
+
+      for(i = 0; i < l; i++) {
+        td = ce('td');
+        input[i].className = 'editor';
+        span[i].className = 'no-editor';
+        //debugger;
+        span[i].innerHTML = toLabel[i](model[props[i]]);
+        td.appendChild(input[i]);
+        td.appendChild(span[i]);
+        view.appendChild(td);
+      }
+
       edit.innerHTML = 'edit';
-      edit.setAttribute('href', 'javascript:void(0);');
-
-      this.startEdit = function() {
-        var classes = view.className.split(' '), i = classes.indexOf('edit');
-        if(i == -1)
+      edit.setAttribute('href', 'javascript:void(0);')
+      td = ce('td');
+      td.appendChild(edit);
+      view.appendChild(td);
+      edit.onclick = function() {
+        if(view.className.indexOf('edit') == -1) {
+          // start edit
           view.className += ' edit';
-      }
-      this.endEdit = function() {
-        var classes = view.className.split(' '), i = classes.indexOf('edit');
-        if(i > -1)
+          for(i = 0; i <l; i++) {
+              input[i].value = toEdit[i](model[props[i]]);
+          }
+        }else{
+          var classes = view.className.split(' ');
+          //try {
+          for(i = 0; i < l; i++) {
+            model[props[i]] = toModel[i](input[i].value);
+            span[i].innerHTML = toLabel[i](model[props[i]]);
+          }
+          //save()
+          //} catch(e) {
+
+          //}
+          i = classes.indexOf('edit');
           classes.splice(i,1);
-        view.className = classes.join(' ');
-        /* parse data? */
-
+          view.className = classes.join(' ');
+          // end edit
+        }
       }
-      edit.onclick = this.startEdit;
-
-      view.appendChild(edit);
-
 
       this.view = view;
-      this.data = data;
+      this.data = model;
     }
   };
 
@@ -81,7 +143,7 @@
     },
     update : function() {
       this.view.button.innerHTML = (!!state.timer ? "Stop" : "Start");
-      this.view.label.innerHTML = (!!state.timer ? new Date(state.timer).toLocaleString() : "Ready" );
+      this.view.label.innerHTML = (!!state.timer ? new Date(state.timer).toLocaleString() : "-" );
     }
   }
 
