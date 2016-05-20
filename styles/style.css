@@ -1,0 +1,189 @@
+/* Clean up the body */
+body {
+  font-family: sans-serif;
+  margin:0px;
+  background: #FEFEFE;
+}
+/* Turn off margins by default */
+div {
+  margin: 0px;
+  padding:0px;
+}
+/* Toggle based on javascript */
+.no-js .js {
+  display: none;
+}
+.js .no-js {
+  display:none;
+}
+/* Toggle editor areas */
+.editor {
+  display:none;
+}
+.edit .editor {
+  display:block;
+}
+.no-editor {
+  display:block;
+}
+.edit .no-editor {
+  display:none;
+}
+/* page styling */
+#page-wrap {
+  /* Use full width unless it's bigger than 1000px. */
+  width:100%;
+  max-width:1000px;
+  /* Center page*/
+  margin: 0px auto;
+  /* Ensure decent page size */
+  min-height:200px;
+  /* Force this div to resize with the floating divs inside it.*/
+  overflow-y: hidden;
+  /* Just debugging */
+  background-color:#EEEEEE;
+}
+.row {
+  padding:3px;
+  overflow:auto;
+  /* padding shouldn't mess up the layout.*/
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+.row:after {
+  clear:both;
+}
+.table div {
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+.table .tr {
+  background-color:#DEDEDE;
+}
+/* Alternate colors */
+.table .tr:nth-child(2n+2) {
+  background-color:#DDD;
+}
+
+@media screen and (min-width: 480px) {
+  /* on large screens it will look like a table, let's make it act like one.*/
+
+  .table .tr {
+    border-top: 1px;
+    border-top-style: solid;
+    border-top-color: gray;
+  }
+  .table .tr:last-child {
+    border-bottom: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: gray;
+  }
+  .table .tr .td {
+    padding: 3px;
+    border-left:1px;
+    border-left-style: solid;
+    border-left-color: gray;
+  }
+  .table .tr .td:last-child {
+    border-right:1px;
+    border-right-style:solid;
+    border-right-color:gray;
+  }
+  /* Add hover highlight */
+  .table .tr:hover div {
+    background:#DDF;
+  }
+  .table .tr:hover {
+    background:#DDF;
+  }
+
+}
+
+@media screen and (max-width: 480px) {
+  .table .tr .td {
+    padding: 5px;
+  }
+  .center-small {
+    text-align: center;
+  }
+}
+
+
+/* Just column definitions from here on.*/
+
+/* columns generic */
+.c3 {
+  width: 25%;
+  float:left;
+}
+.c4 {
+  width:33%;
+  float:left;
+}
+.c6 {
+  width:50%;
+  float:left;
+}
+.c9 {
+  width:75%;
+  float:left;
+}
+.c12 {
+  width:100%;
+  float:left;
+}
+/* columns large */
+@media screen and (min-width: 480px) {
+  .show-small {
+    display:none;
+  }
+  .c3-l {
+    width: 25%;
+    float:left;
+  }
+  .c4-l {
+    width:33%;
+    float:left;
+  }
+  .c6-l {
+    width:50%;
+    float:left;
+  }
+  .c9-l {
+    width:75%;
+    float:left;
+  }
+  .c12-l {
+    width:100%;
+    float:left;
+  }
+}
+/* columns small */
+@media screen and (max-width: 480px) {
+  .show-large {
+    display:none;
+  }
+  .c3-s {
+    width: 25%;
+    float:left;
+  }
+  .c4-s {
+    width:33%;
+    float:left;
+  }
+  .c6-s {
+    width:50%;
+    float:left;
+  }
+  .c9-s {
+    width:75%;
+    float:left;
+  }
+  .c12-s {
+    width:100%;
+    float:left;
+  }
+}
+/* | */
